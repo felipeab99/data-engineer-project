@@ -1,21 +1,21 @@
 # 🚀 Data Engineering Project - E-commerce
 
 ## 📌 Visão geral
-Pipeline de dados completo simulando um ambiente de produção, utilizando arquitetura medalhão (Bronze, Silver e Gold) para transformar dados brutos em informações analíticas.
+Pipeline de dados completo simulando um ambiente de produção, utilizando arquitetura medalhão (Bronze, Silver e Gold) para transformar dados brutos em dados analíticos prontos para consumo em BI.
 
 ## 🧱 Arquitetura
 
 - **Bronze**: ingestão de dados brutos (CSV → Parquet)
-- **Silver**: limpeza, tratamento e enriquecimento (joins)
+- **Silver**: limpeza, tratamento e enriquecimento (joins entre tabelas)
 - **Gold**: criação de métricas de negócio (KPIs)
 
 ## 🔄 Pipeline de dados
 
-1. Extração de dados (dataset público de e-commerce)
-2. Armazenamento em Data Lake (local)
+1. Extração de dados de múltiplas fontes (dataset de e-commerce)
+2. Armazenamento em Data Lake (simulado localmente)
 3. Transformações com Python (Pandas)
-4. Modelagem analítica
-5. Geração de dataset final para BI
+4. Modelagem analítica (dataset final)
+5. Disponibilização para consumo em ferramentas de BI
 
 ## ⚙️ Tecnologias utilizadas
 
@@ -23,29 +23,30 @@ Pipeline de dados completo simulando um ambiente de produção, utilizando arqui
 - Pandas
 - Parquet
 - Arquitetura ELT
-- Modelagem de dados
+- Modelagem dimensional
 
 ## 📊 Dataset final (Gold Layer)
 
-Tabela com métricas de negócio:
+Tabela analítica contendo:
 
 - Receita diária
 - Quantidade de pedidos
 - Ticket médio
 
 ## 📁 Estrutura do projeto
+
 data-engineer-project/
 │
-├── data/ # Data Lake (não versionado)
-│ ├── raw/
-│ ├── bronze/
-│ ├── silver/
-│ └── gold/
+├── data/
+│   ├── raw/
+│   ├── bronze/
+│   ├── silver/
+│   └── gold/
 │
-├── pipelines/ # Scripts de processamento
-│ ├── bronze.py
-│ ├── silver.py
-│ └── gold.py
+└── pipelines/
+    ├── bronze.py
+    ├── silver.py
+    └── gold.py
 
 ## ⚠️ Boas práticas aplicadas
 
