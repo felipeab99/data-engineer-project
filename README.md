@@ -35,18 +35,25 @@ Tabela analítica contendo:
 
 ## 📁 Estrutura do projeto
 
+## 📁 Project Structure
+
+```text
 data-engineer-project/
 │
 ├── data/
-│   ├── raw/
-│   ├── bronze/
-│   ├── silver/
-│   └── gold/
+│   ├── raw/        # dados brutos
+│   ├── bronze/     # dados tratados leve
+│   ├── silver/     # dados limpos
+│   └── gold/       # dados prontos para BI
 │
-└── pipelines/
-    ├── bronze.py
-    ├── silver.py
-    └── gold.py
+├── pipelines/
+│   ├── bronze.py
+│   ├── silver.py
+│   └── gold.py
+│
+├── notebooks/
+├── tests/
+└── README.md
 
 ## ⚠️ Boas práticas aplicadas
 
