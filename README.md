@@ -1,75 +1,215 @@
 # 🏗️ Data Engineering Pipeline — Olist E-commerce
 
-Pipeline de engenharia de dados end-to-end usando dados públicos do e-commerce brasileiro Olist.
+Pipeline de engenharia de dados end-to-end utilizando dados públicos do e-commerce brasileiro Olist. O projeto implementa uma arquitetura Medallion (Bronze, Silver e Gold) com armazenamento em Azure Data Lake Gen2, orquestração via Apache Airflow e análises exploratórias realizadas no Databricks com PySpark.
 
-## 📐 Arquitetura 
+---
 
-CSV (Kaggle/Olist)
-↓
-[Bronze]  → Conversão CSV → Parquet
-↓
-[Silver]  → Limpeza e junção das tabelas
-↓
-[Gold]   → Métricas agregadas de vendas
-↓
-Databricks → Análise exploratória com PySpark
+## 📐 Arquitetura da Solução
 
-Todas as camadas armazenadas no **Azure Data Lake Gen2**.
-Pipeline orquestrado pelo **Apache Airflow**.
+O pipeline segue uma arquitetura em camadas para garantir organização, qualidade e escalabilidade dos dados.
 
-## 🛠️ Stack
+```text
+Olist CSV Dataset
+        │
+        ▼
+Azure Data Lake Gen2
+        │
+        ▼
+Bronze Layer
+(Ingestão Raw)
+        │
+        ▼
+Silver Layer
+(Limpeza e Enriquecimento)
+        │
+        ▼
+Gold Layer
+(Métricas de Negócio)
+        │
+        ▼
+Databricks + PySpark
+(Análises e Insights)
+```
 
-| Ferramenta | Uso |
-|---|---|
-| Python | Transformações dos dados |
+---
+
+## 🛠️ Stack Tecnológica
+
+| Ferramenta | Finalidade |
+|------------|------------|
+| Python | Transformações e processamento de dados |
 | Apache Airflow | Orquestração do pipeline |
 | Docker | Containerização do Airflow |
-| Azure Data Lake Gen2 | Armazenamento Bronze/Silver/Gold |
-| PySpark | Análise exploratória dos dados |
+| Azure Data Lake Gen2 | Armazenamento das camadas Bronze, Silver e Gold |
 | Databricks | Ambiente de processamento distribuído |
+| PySpark | Transformação e análise dos dados |
+| GitHub | Versionamento do projeto |
 
-## 📊 Camadas
+---
 
-**Bronze** — Ingestão raw: converte os CSVs do Olist para Parquet sem transformações.
+## 📊 Pipeline de Dados
 
-**Silver** — Limpeza e enriquecimento: filtra pedidos entregues, faz joins entre orders, items, customers, products e payments.
+### 🥉 Bronze Layer
 
-**Gold** — Agregação: métricas diárias de receita, pedidos e ticket médio.
+Responsável pela ingestão dos dados brutos.
 
-## 🔍 Análises (PySpark)
+- Leitura dos arquivos CSV do dataset Olist
+- Conversão para formato Parquet
+- Armazenamento sem transformações
 
-- Receita total: R$ 13,8 milhões
-- Maior dia de vendas: 24/11/2017 (Black Friday) — R$ 152k
-- Crescimento consistente de 2016 a 2018
+### 🥈 Silver Layer
 
-## 📁 Estrutura
+Responsável pela limpeza e enriquecimento dos dados.
+
+- Filtragem de pedidos entregues
+- Tratamento de inconsistências
+- Junção das tabelas:
+  - Orders
+  - Order Items
+  - Customers
+  - Products
+  - Payments
+
+### 🥇 Gold Layer
+
+Responsável pela geração de métricas de negócio.
+
+- Receita diária
+- Quantidade de pedidos
+- Ticket médio
+- Indicadores para análise estratégica
+
+---
+
+## 🌬️ Apache Airflow
+
+### DAG do Pipeline
+
+![Airflow DAG](airflow.webp)
+
+
+
+O Airflow é responsável pela execução automatizada das etapas Bronze, Silver e Gold, garantindo o fluxo correto dos dados entre as camadas.
+
+---
+
+## ⚡ Databricks & PySpark
+
+### Análises
+
+![Databricks Notebook](databricks.png)
+
+![Databricks Notebook](databricks2.png)
+
+As análises exploratórias foram realizadas utilizando PySpark dentro do Databricks, permitindo o processamento distribuído dos dados.
+
+---
+
+## 📈 Principais Insights
+
+| Métrica | Resultado |
+|----------|------------|
+| Receita Total | R$ 13,8 milhões |
+| Maior Dia de Vendas | 24/11/2017 (Black Friday) |
+| Receita no Pico | R$ 152 mil |
+| Período Analisado | 2016–2018 |
+| Tendência | Crescimento consistente |
+
+### Destaques
+
+- Identificação do impacto da Black Friday nas vendas.
+- Crescimento contínuo da receita ao longo do período analisado.
+- Consolidação de métricas de negócio para tomada de decisão.
+
+---
+
+## 📂 Estrutura do Projeto
+
+```text
+data-engineer-project/
+│
 ├── dags/
 │   └── pipeline_dag.py
+│
 ├── pipelines/
 │   ├── bronze.py
 │   ├── silver.py
 │   ├── gold.py
 │   └── azure_client.py
+│
 ├── data/
 │   └── raw/
-└── docker-compose.yml
+│
+├── docker-compose.yml
+│
+└── README.md
+```
 
-## 🚀 Como rodar
+---
+
+## 🚀 Como Executar
+
+### 1. Clonar o repositório
 
 ```bash
-# 1. Clone o repositório
-git clone https://github.com/felipeab99/data-engineer-project
-
-# 2. Configure o .env com sua Azure Connection String
-AZURE_CONNECTION_STRING=sua_connection_string
-
-# 3. Suba o Airflow
-cd airflow
-docker-compose up -d
-
-# 4. Acesse localhost:8080 e rode o DAG olist_pipeline
+git clone https://github.com/felipeab99/data-engineer-project.git
 ```
+
+### 2. Configurar as variáveis de ambiente
+
+```env
+AZURE_CONNECTION_STRING=sua_connection_string
+```
+
+### 3. Iniciar o Airflow
+
+```bash
+docker-compose up -d
+```
+
+### 4. Acessar o Airflow
+
+```text
+http://localhost:8080
+```
+
+Executar a DAG:
+
+```text
+olist_pipeline
+```
+
+---
 
 ## 📦 Dataset
 
-[Olist E-commerce Dataset — Kaggle](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce)
+Dataset público disponibilizado pela Olist no Kaggle:
+
+https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce
+
+---
+
+## 🎯 Competências Demonstradas
+
+- Engenharia de Dados
+- ETL / ELT
+- Apache Airflow
+- Azure Data Lake Gen2
+- Databricks
+- PySpark
+- Docker
+- Arquitetura Medallion
+- Data Lake
+- Orquestração de Pipelines
+- Análise Exploratória de Dados
+
+---
+
+## 🔮 Melhorias Futuras
+
+- Implementação de testes automatizados
+- Monitoramento e alertas no Airflow
+- Dashboard em Power BI
+- Integração com Azure Data Factory
+- Deploy em ambiente cloud produtivo
+- Implementação de Data Quality Checks
