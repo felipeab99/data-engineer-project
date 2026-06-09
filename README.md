@@ -1,69 +1,75 @@
-# 🚀 Data Engineering Project - E-commerce
+# 🏗️ Data Engineering Pipeline — Olist E-commerce
 
-## 📌 Visão geral
-Pipeline de dados completo simulando um ambiente de produção, utilizando arquitetura medalhão (Bronze, Silver e Gold) para transformar dados brutos em dados analíticos prontos para consumo em BI.
+Pipeline de engenharia de dados end-to-end usando dados públicos do e-commerce brasileiro Olist.
 
-## 🧱 Arquitetura
+## 📐 Arquitetura 
 
-- **Bronze**: ingestão de dados brutos (CSV → Parquet)
-- **Silver**: limpeza, tratamento e enriquecimento (joins entre tabelas)
-- **Gold**: criação de métricas de negócio (KPIs)
+CSV (Kaggle/Olist)
+↓
+[Bronze]  → Conversão CSV → Parquet
+↓
+[Silver]  → Limpeza e junção das tabelas
+↓
+[Gold]   → Métricas agregadas de vendas
+↓
+Databricks → Análise exploratória com PySpark
 
-## 🔄 Pipeline de dados
+Todas as camadas armazenadas no **Azure Data Lake Gen2**.
+Pipeline orquestrado pelo **Apache Airflow**.
 
-1. Extração de dados de múltiplas fontes (dataset de e-commerce)
-2. Armazenamento em Data Lake (simulado localmente)
-3. Transformações com Python (Pandas)
-4. Modelagem analítica (dataset final)
-5. Disponibilização para consumo em ferramentas de BI
+## 🛠️ Stack
 
-## ⚙️ Tecnologias utilizadas
+| Ferramenta | Uso |
+|---|---|
+| Python | Transformações dos dados |
+| Apache Airflow | Orquestração do pipeline |
+| Docker | Containerização do Airflow |
+| Azure Data Lake Gen2 | Armazenamento Bronze/Silver/Gold |
+| PySpark | Análise exploratória dos dados |
+| Databricks | Ambiente de processamento distribuído |
 
-- Python
-- Pandas
-- Parquet
-- Arquitetura ELT
-- Modelagem dimensional
+## 📊 Camadas
 
-## 📊 Dataset final (Gold Layer)
+**Bronze** — Ingestão raw: converte os CSVs do Olist para Parquet sem transformações.
 
-Tabela analítica contendo:
+**Silver** — Limpeza e enriquecimento: filtra pedidos entregues, faz joins entre orders, items, customers, products e payments.
 
-- Receita diária
-- Quantidade de pedidos
-- Ticket médio
+**Gold** — Agregação: métricas diárias de receita, pedidos e ticket médio.
 
-## 📁 Estrutura do projeto
+## 🔍 Análises (PySpark)
 
-## 📁 Project Structure
+- Receita total: R$ 13,8 milhões
+- Maior dia de vendas: 24/11/2017 (Black Friday) — R$ 152k
+- Crescimento consistente de 2016 a 2018
 
-```text
-data-engineer-project/
-│
-├── data/
-│   ├── raw/        # dados brutos
-│   ├── bronze/     # dados tratados leve
-│   ├── silver/     # dados limpos
-│   └── gold/       # dados prontos para BI
-│
+## 📁 Estrutura
+├── dags/
+│   └── pipeline_dag.py
 ├── pipelines/
 │   ├── bronze.py
 │   ├── silver.py
-│   └── gold.py
-│
-├── notebooks/
-├── tests/
-└── README.md
+│   ├── gold.py
+│   └── azure_client.py
+├── data/
+│   └── raw/
+└── docker-compose.yml
 
-## ⚠️ Boas práticas aplicadas
+## 🚀 Como rodar
 
-- Separação em camadas (arquitetura medalhão)
-- Uso de formato columnar (Parquet)
-- Dados não versionados no repositório
-- Pipeline reprodutível
+```bash
+# 1. Clone o repositório
+git clone https://github.com/felipeab99/data-engineer-project
 
-## 🚀 Próximos passos
+# 2. Configure o .env com sua Azure Connection String
+AZURE_CONNECTION_STRING=sua_connection_string
 
-- Orquestração com Airflow
-- Processamento distribuído com Spark
-- Deploy em cloud (Azure / AWS)
+# 3. Suba o Airflow
+cd airflow
+docker-compose up -d
+
+# 4. Acesse localhost:8080 e rode o DAG olist_pipeline
+```
+
+## 📦 Dataset
+
+[Olist E-commerce Dataset — Kaggle](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce)
