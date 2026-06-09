@@ -205,11 +205,3 @@ https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce
 
 ---
 
-## 🔮 Melhorias Futuras
-
-- Implementação de testes automatizados
-- Monitoramento e alertas no Airflow
-- Dashboard em Power BI
-- Integração com Azure Data Factory
-- Deploy em ambiente cloud produtivo
-- Implementação de Data Quality Checks
